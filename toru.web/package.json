@@ -1,0 +1,28 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "build:vercel": "NITRO_PRESET=vercel-edge nuxt build",
+    "dev": "nuxt dev --host --port=\"16947\"",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "prod": "npx nuxi build && npx nuxi start"
+  },
+  "author": {
+    "name": "heito",
+    "email": "me@heito.xyz",
+    "url": "https://heito.xyz"
+  },
+  "dependencies": {
+    "nuxt": "^3.11.2",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "sass": "^1.77.2"
+  }
+}
