@@ -1,0 +1,40 @@
+:root {
+    --color-1: #ffe5ec;
+    --color-2: #ffc2d1;
+    --color-3: #ffb3c6;
+    --color-4: #ff8fab;
+    --color-5: #fb6f92;
+
+    --T: transparent;
+}
+
+
+html.light:root {
+    /* * Background Color */
+    --background-primary: #ffe5ec;
+    --background-primary-alt: #eed5dc;
+    
+    --background-secondary: #ffc2d1;
+
+    --dimming-primary: #ffffff55;
+    --dimming-secondary: #ffffff95;
+
+    /* * Text Color */
+    --text-primary: #1e1e1e;
+    --text-secondary: #363636;
+}
+
+html.dark:root {
+    /* * Background Color */
+    --background-primary: #212121;
+    --background-primary-alt: #242424;
+
+    --background-secondary: #1d1d1d;
+
+    --dimming-primary: #00000055;
+    --dimming-secondary: #00000095;
+
+    /* * Text Color */
+    --text-primary: #e8e8e8;
+    --text-secondary: #adadad;
+}

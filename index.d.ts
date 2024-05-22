@@ -1,7 +1,7 @@
 interface PageOptions {}
 
 
-type Flag = 'hide-footer' | 'hide-header';
+type Flag = 'hide:header' | 'hide:footer';
 
 
 declare module '#app/../pages/runtime/composables' {

@@ -1,6 +1,6 @@
 <template>
     <NuxtLayout class="layout">
-        <Header/>
+        <Header v-if="!$route.meta?.flags?.includes('hide:header')"/>
 
         <NuxtPage class="page"/>
     </NuxtLayout>
@@ -21,6 +21,10 @@ const $user = useUserStore();
 
 onMounted(() => {
     if (process.server) return;
+
+    if (cookies.get('THEME') !== 'light') {
+        document.querySelector('html')?.classList.add('dark');
+    }
 });
 
 
@@ -41,10 +45,14 @@ useHead({
             rel: 'icon',
             type: 'image/png',
             href: '/favicon.ico'
-        }
+        },
+        // {
+        //     rel: 'stylesheet',
+        //     href: 'https://ti.heito.xyz/style.css'
+        // }
     ],
     htmlAttrs: {
-        class: 'dark',
+        class: 'light',
         lang: 'en'
     }
 });

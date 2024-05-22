@@ -18,6 +18,19 @@ export default defineNuxtConfig({
         ]
     },
 
+    hooks: {
+        'pages:extend'(pages) {
+            pages.push({
+                name: 'register',
+                path: '/register',
+                file: '~/pages/login.vue',
+                alias: [
+                    '/reg'
+                ]
+            });
+        }
+    },
+
     modules: [
         '@pinia/nuxt'
     ],

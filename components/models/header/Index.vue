@@ -1,6 +1,6 @@
 <template>
     <header>
-        <NuxtLink to="/">Toru</NuxtLink>
+        <NuxtLink class="logo" to="/">Toru <Icon name="id"/></NuxtLink>
 
         <AccountMenu/>
     </header>
@@ -27,6 +27,16 @@ header {
     transition: .2s;
     box-sizing: border-box;
     z-index: 100;
+
+    a.logo {
+        color: var(--color-2);
+        font-weight: 700;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 </style>
