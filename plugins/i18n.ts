@@ -65,7 +65,7 @@ export default defineNuxtPlugin(async ({ vueApp, $config: { public: { apiTransla
 
     async function loadLanguage(code: CodeName) {
         $wait.start('language:load', {
-            label: `${readyLangs.has(code) ? 'Обновление' : 'Загрузка'} языкового пакета`
+            label: `${readyLangs.has(code) ? 'Обновление' : 'Загрузка'} языкового пакета ${en.languages[code]}`
         });
 
         const result = await fetchLanguage(code);
