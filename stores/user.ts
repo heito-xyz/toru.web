@@ -15,6 +15,9 @@ export const useUserStore = defineStore('user', () => {
 
     const { $api } = useNuxtApp();
 
+    const $wait = useWaitStore();
+
+
     // * Getters
     const account = computed(() => _accounts.value.find(account => account.user._id === _userId.value));
 
@@ -24,8 +27,8 @@ export const useUserStore = defineStore('user', () => {
 
     const avatar = computed(() => {
         if (!isAuth.value) return '';
-
-        return getDefaultImage(user.value?._id || 'guast');
+        
+        return getDefaultImage(user.value?._id!);
     });
 
     const accounts = computed(() => _accounts.value.map(({ user, addedAt }) => ({ ...user, addedAt })));
@@ -55,6 +58,10 @@ export const useUserStore = defineStore('user', () => {
 
         if (cookieAccounts.length < 1) return;
 
+        $wait.start('accounts:load', {
+            label: 'Загрузка аккаунтов'
+        });
+
         const list: Array<Omit<Account, 'user'> & { userId: string }> = [];
 
         for (const key of cookieAccounts) {
@@ -69,6 +76,8 @@ export const useUserStore = defineStore('user', () => {
         }
 
         const { ok, data } = await $api.auth.getUsersByTokens(...list.map(account => account.access));
+
+        $wait.end('accounts:load');
 
         if (!ok) return;
 

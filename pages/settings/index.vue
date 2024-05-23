@@ -1,16 +1,21 @@
 <template>
-    <div class="home">
-        <h1>{{ $t('welcome') }}</h1>
+    <div class="settings">
+        <h1>{{ $t('settings') }}</h1>
     </div>
 </template>
 
 <script lang="ts" setup>
 
+
+definePageMeta({
+    middleware: ['is-auth'],
+});
+
 </script>
 
 <style lang="scss" scoped>
 
-.page.home {
+.page.settings {
     display: flex;
     width: 100vw;
     height: 100vh;

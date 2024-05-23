@@ -23,7 +23,7 @@ $duration: 1.4s;
     animation: Rotator $duration linear infinite;
 
     .path {
-        stroke: var(--color-2);
+        stroke: var(--color-primary);
         stroke-dasharray: $offset;
         stroke-dashoffset: 0;
         transform-origin: center;

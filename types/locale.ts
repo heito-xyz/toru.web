@@ -1,0 +1,52 @@
+export const localeVersion = '0.0.1';
+
+export const codes = [
+    'en',
+    'ru',
+    'ja',
+    'uk',
+    'zh',
+    'fr',
+    'es'
+] as const;
+
+export type CodeName = typeof codes[number];
+
+export interface Locale {
+    languages: Record<CodeName, string>;
+
+    language: string;
+
+    welcome: string;
+
+    guast: string;
+    settings: string;
+    exit: string;
+
+    theme: string;
+    themes: Record<'dark' | 'light', string>;
+
+    addAccount: string;
+    exitAllAccounts: string;
+
+    showAllAccounts: string;
+    rollUp: string;
+
+    authorization: string;
+    register: string;
+    registration: string;
+    username: string;
+    email: string;
+    password: string;
+    enterLogin: string;
+    or: string;
+    createAccount: string;
+    loginOther: string;
+    repeatPassword: string;
+    forgotPassword: string;
+    loginAccount: string;
+}
+
+export function locale(params: Locale) {
+    return params;
+}

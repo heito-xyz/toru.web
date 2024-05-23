@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const $user = useUserStore();
 
     if (!$user.isAuth) {
-        return navigateTo('/auth', { external: true });
+        return navigateTo('/', { external: true });
     }
 });

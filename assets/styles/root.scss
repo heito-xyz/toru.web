@@ -12,8 +12,8 @@
 * {
     font-family: var(--font-family);
 
-    scrollbar-color: var(--color-primary) transparent;
-    scrollbar-width: thin;
+    // scrollbar-color: var(--color-primary) transparent;
+    // scrollbar-width: thin;
 }
 
 
@@ -45,12 +45,9 @@ ul, li {
     background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
-    cursor: pointer;
+    cursor: ns-resize;
+    width: 4px;
     border-radius: 5px;
-    background-color: var(--blue-alpha);
+    background-color: var(--color-primary);
     transition: all .2s;
-
-    &:hover {
-        background-color: var(--color-primary);
-    }
 }

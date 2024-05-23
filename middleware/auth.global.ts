@@ -1,13 +1,16 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if (process.server) return;
 
-    // * User
+    // * Stores
+    const $index = useStore();
     const $user = useUserStore();
+    const $wait = useWaitStore();
 
-    if ($user.isAuth) return;
+    if (!$user.isAuth) {
+        await $user.fetchAccounts();
+    }
 
-    console.log(123);
+    console.log('auth');
     
-
-    $user.fetchAccounts();
+    $index.setReady(true);
 });

@@ -1,26 +1,38 @@
 <template>
+    <ClientOnly>
+        <Wait/>
+    </ClientOnly>
+
     <NuxtLayout class="layout">
         <Header v-if="!$route.meta?.flags?.includes('hide:header')"/>
 
-        <NuxtPage class="page"/>
+        <NuxtPage class="page" v-if="$index.ready"/>
     </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
 
 import Header from '~/components/models/header/Index.vue';
+import Wait from '~/components/models/wait/Index.vue';
 
+
+const { $lang } = useNuxtApp();
 
 const
     $route = useRoute(),
     $request = useRequestURL();
 
 
+const $index = useStore();
 const $user = useUserStore();
 
 
 onMounted(() => {
     if (process.server) return;
+
+    console.log('start app');
+    
+    $lang.init();
 
     if (cookies.get('THEME') !== 'light') {
         document.querySelector('html')?.classList.add('dark');

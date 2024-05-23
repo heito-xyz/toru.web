@@ -41,7 +41,8 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         public: {
-            apiUrl: process.env.API_URL
+            apiUrl: process.env.API_URL,
+            apiTranslateUrl: process.env.API_TRANSLATE_URL
         }
     }
 });

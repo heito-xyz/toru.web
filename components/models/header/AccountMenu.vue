@@ -1,106 +1,136 @@
 <template>
     <div :class="['account-menu', { active: shows.has('menu') }]">
-        <img class="avatar" v-if="$user.isAuth"
-            :src="$user.avatar"
+        <Image class="avatar" v-if="$user.isAuth || !isLogin"
+            :src="isLogin ? $user.avatar : getDefaultImage('guast', { type: 'marble' })"
             alt="Account Avatar"
-            
-            @click="openAccountMenu"
-        >
 
-        <div class="avatar" v-else>
+            @click="shows.has('menu') ? shows.delete('menu') : openAccountMenu()"
+        />
+
+        
+        <div class="avatar loading" v-else>
             <CircleSpinner/>
         </div>
-        
+
         <Transition name="content">
             <div class="content" ref="el" v-show="shows.has('menu')">
                 <div class="account">
-                    <span>{{ $user.user?.displayName || $user.user?.username || $user.user?._id }}</span>
+                    <span>{{ $user.user?.displayName || $user.user?.username || $user.user?._id || $t('guast') }}</span>
 
                     <div></div>
                 </div>
 
-                <div class="group">
-                    <Button
-                        label="Настройки"
-                        icon="settings"
-                    />
+                <div>
+                    <div class="group">
+                        <Button v-if="isLogin"
+                            :label="$t('settings')"
+                            icon="settings"
+                            
+                            @click="$router.push('/settings'); shows.delete('menu')"
+                        />
+    
+                        <Button v-else
+                            :label="$t('enterLogin')"
+                            icon="login"
+    
+                            @click="$router.push('/login'); shows.delete('menu')"
+                        />
+    
+                        <Button
+                            :label="$t('theme')"
+                            :text="$t(`themes.${lightTheme ? 'light' : 'dark'}`)"
+                            :icon="lightTheme ? 'sun' : 'moon'"
+                            :reverse="true"
+    
+                            @click="changeTheme"
+                        />
 
-                    <Button
-                        label="Тема"
-                        :text="lightTheme ? 'Светлая' : 'Темная'"
-                        :icon="lightTheme ? 'sun' : 'moon'"
-                        :reverse="true"
-
-                        @click="changeTheme"
-                    />
-                </div>
-
-                <div class="accounts">
-                    <Button :class="{ active: shows.has('accounts') }"
-                        :label="shows.has('accounts') ? 'Свернуть' : 'Показать другие аккаунты'"
-                        :iconRight="`arrow-${shows.has('accounts') ? 'up' : 'down'}`"
-                        :flags="['icon-right']"
-
-                        @click="shows[shows.has('accounts') ? 'delete' : 'add']('accounts')"
-                    >
-                        <template #after-content>
-                            <img v-for="account of listAccounts.slice(0, listAccounts.length > 3 ? 2 : 3)" :key="account._id"
-                                :src="getDefaultImage(account._id)"
-                                alt="Account Avatar"
-                            >
-
-                            <div class="count" v-show="listAccounts.length > 3">+{{ listAccounts.length - 2 }}</div>
-                        </template>
-                    </Button>
-
-                    <AnimationHeight :showed="shows.has('accounts')">
-                        <div>
-                            <ul>
-                                <Button class="active" v-for="account of listAccounts" :key="account._id"
-                                    :label="account?.displayName || account?.username || account?._id"
-                                    :text="`@${account?.username}`"
-                                    :img="getDefaultImage(account._id)"
-                                    icon-right="arrow-right"
-
-                                    @click="$user.switchAccount(account._id, true)"
-                                />
-                            </ul>
-
-                            <Button
-                                label="Добавить аккаунт"
+                        <template v-if="isLogin && listAccounts.length === 0">
+                            <Button label="Войти в"
+                                text="другой аккаунт"
                                 icon="plus"
 
                                 @click="$router.push('/login'); shows.delete('menu')"
                             />
 
-                            <Button
-                                label="Выйти из всех аккаунтов"
+                            <Button :label="$t('exit')"
                                 icon="exit"
+
+                                @click="shows.delete('menu')"
                             />
-                        </div>
-                    </AnimationHeight>
-                </div>
-
-                <div class="language">
-                    <Button :class="{ active: shows.has('lang') }"
-                        label="Язык"
-                        icon="language"
-                        :text="'Русский'"
-                        :iconRight="`arrow-${shows.has('lang') ? 'up' : 'down'}`"
-                        :flags="['icon-right']"
-
-                        @click="shows[shows.has('lang') ? 'delete' : 'add']('lang')"
-                    />
-
-                    <AnimationHeight :showed="shows.has('lang')">
-                        <div>
-                            <ul>
-                                <Button v-for="(lang, idx) of new Array(196)" :key="idx"
-                                    :label="`Language ${idx + 1}`"
+                        </template>
+                    </div>
+    
+                    <div class="accounts">
+                        <Button :class="{ active: shows.has('accounts') }" v-if="isLogin && listAccounts.length > 0"
+                            :label="$t(shows.has('accounts') ? 'rollUp' : 'showAllAccounts')"
+                            :iconRight="`arrow-${shows.has('accounts') ? 'up' : 'down'}`"
+                            :flags="['icon-right']"
+    
+                            @click="shows[shows.has('accounts') ? 'delete' : 'add']('accounts')"
+                        >
+                            <template #after-content>
+                                <Image v-for="account of listAccounts.slice(0, listAccounts.length > 3 ? 2 : 3)" :key="account._id"
+                                    :src="getDefaultImage(account._id)"
+                                    alt="Account Avatar"
                                 />
-                            </ul>
-                        </div>
-                    </AnimationHeight>
+    
+                                <div class="count" v-show="listAccounts.length > 3">+{{ listAccounts.length - 2 }}</div>
+                            </template>
+                        </Button>
+    
+                        <AnimationHeight :showed="shows.has('accounts')">
+                            <div>
+                                <ul>
+                                    <Button class="active" v-for="account of listAccounts" :key="account._id"
+                                        :label="account?.displayName || account?.username || account?._id"
+                                        :text="`@${account?.username}`"
+                                        :img="getDefaultImage(account._id)"
+                                        icon-right="arrow-right"
+    
+                                        @click="$user.switchAccount(account._id, true)"
+                                    />
+                                </ul>
+    
+                                <Button
+                                    :label="$t('addAccount')"
+                                    icon="plus"
+    
+                                    @click="$router.push('/login'); shows.delete('menu')"
+                                />
+    
+                                <Button
+                                    :label="$t('exitAllAccounts')"
+                                    icon="exit"
+                                />
+                            </div>
+                        </AnimationHeight>
+                    </div>
+    
+                    <div class="language">
+                        <Button :class="{ active: shows.has('lang') }"
+                            :label="$t('language')"
+                            icon="language"
+                            :text="$t(`languages.` + $lang.code.value)"
+                            :iconRight="`arrow-${shows.has('lang') ? 'up' : 'down'}`"
+                            :flags="['icon-right']"
+    
+                            @click="shows[shows.has('lang') ? 'delete' : 'add']('lang')"
+                        />
+    
+                        <AnimationHeight :showed="shows.has('lang')">
+                            <div>
+                                <ul>
+                                    <Button v-for="langCodeName of $lang.codes" :key="langCodeName"
+                                        :label="$t(`languages.${langCodeName}`)"
+                                        icon-right="arrow-right"
+
+                                        @click="$lang.set(langCodeName)"
+                                    />
+                                </ul>
+                            </div>
+                        </AnimationHeight>
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -115,6 +145,8 @@ import Button from './Button.vue';
 import CircleSpinner from '../other/CircleSpinner.vue';
 
 
+const { $lang } = useNuxtApp();
+
 const $user = useUserStore();
 
 
@@ -125,6 +157,8 @@ const lightTheme = ref(cookies.get('THEME') === 'light');
 
 const shows = ref(new Set<'menu' | 'accounts' | 'lang'>());
 
+
+const isLogin = computed(() => Boolean($user?.user?._id));
 
 const listAccounts = computed(() => {
     return $user.accounts.filter(({ _id }) => $user.user?._id !== _id);
@@ -167,7 +201,7 @@ function changeTheme() {
     position: relative;
 
     &.active {
-        img.avatar {
+        .avatar {
             width: 125%;
             height: 125%;
             transform: translate(-18.5px, 8px);
@@ -185,6 +219,24 @@ function changeTheme() {
         position: relative;
         transition: .2s;
         z-index: 2;
+
+        &.icon {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                i {
+                    color: var(--color-primary);
+                }
+            }
+
+            i {
+                font-size: 24px;
+                transition: .2s;
+            }
+        }
     }
 
     img.avatar {
@@ -206,7 +258,7 @@ function changeTheme() {
     }
 
     .content {
-        padding: 8px;
+        padding: 8px 4px 8px 8px;
         width: 376px;
         max-height: calc(100vh - 16px);
         position: absolute;
@@ -217,7 +269,7 @@ function changeTheme() {
         background-color: var(--background-primary);
         box-sizing: border-box;
         transition: .2s;
-        overflow-x: hidden;
+        overflow: hidden;
 
         &-enter-active,
         &-leave-active {
@@ -231,7 +283,7 @@ function changeTheme() {
             justify-content: flex-end;
 
             span {
-                margin-right: 8px;
+                margin-right: 16px;
                 font-weight: 700;
             }
 
@@ -241,26 +293,26 @@ function changeTheme() {
             }
         }
 
-        .group {
-            display: flex;
+        .account + div {
             margin-top: 12px;
-            align-items: stretch;
+            max-height: calc(100vh - 96px);
+            border-radius: 25px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .group {
+            display: grid;
+            border-radius: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            overflow: hidden;
         
             .btn {
-                width: 100%;
+                box-sizing: border-box;
 
-                &:first-child {
-                    border-top-left-radius: 25px;
-                    border-bottom-left-radius: 25px;
-                }
-
-                &:last-child {
-                    border-top-right-radius: 25px;
-                    border-bottom-right-radius: 25px;
-                }
-
-                &:not(:last-child) {
-                    margin-right: 2px
+                &:nth-child(2n + 1):not(:has(+ .btn)) {
+                    grid-column: span 2;
                 }
             }
         }

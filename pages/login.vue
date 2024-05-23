@@ -3,21 +3,28 @@
         <main>
             <h2 class="toru-id">Toru <Icon name="id"/></h2>
 
-            <h2 style="margin: 24px 0 16px 0;">{{ isLoginPage ? 'Авторизация' : 'Регистрация' }}</h2>
+            <h2 style="margin: 24px 0 16px 0;">{{ $t(isLoginPage ? 'authorization' : 'registration') }}</h2>
 
             <Textbox :name="isLoginPage ? 'login' : 'username'"
-                :label="'Имя пользователя' + (isLoginPage ? ' или почта' : '')"
+                :label="$t('username') + (isLoginPage ? ` ${$t('or')} ${$t('email').toLocaleLowerCase()}` : '')"
                 
                 v-model:value="login"
             />
 
-            <Textbox name="email" label="Почта" v-if="!isLoginPage"
+            <Textbox name="email" v-if="!isLoginPage"
+                :label="$t('email')"
                 v-model:value="email"
             />
 
-            <Textbox name="password" label="Пароль" type="password" v-model:value="password"/>
+            <Textbox name="password"
+                :label="$t('password')"
+                type="password"
 
-            <Textbox label="Повтор пароля" v-if="!isLoginPage"
+                v-model:value="password"
+            />
+
+            <Textbox v-if="!isLoginPage"
+                :label="$t('repeatPassword')"
                 type="password"
                 
                 v-model:value="repeatPassword"
@@ -25,10 +32,10 @@
 
             <NuxtLink v-if="isLoginPage"
                 style="text-align: left; margin-top: 4px;"
-            >Забыли пароль?</NuxtLink>
+            >{{ $t('forgotPassword') }}</NuxtLink>
 
             <Button
-                :label="isLoginPage ? 'Войти' : 'Зарегистрироваться'"
+                :label="$t(isLoginPage ? 'enterLogin' : 'register')"
                 icon="login" icon-right="arrow-right"
                 :disabled="!isValidForm"
                 
@@ -36,11 +43,11 @@
             />
 
             <NuxtLink :to="isLoginPage ? '/register' : '/login'">
-                {{ isLoginPage ? 'Создать аккаунт' : 'Войти в аккаунт' }}
+                {{ $t(isLoginPage ? 'createAccount' : 'loginAccount') }}
             </NuxtLink>
 
             <NuxtLink>
-                Войти другим способом
+                {{ $t('loginOther') }}
             </NuxtLink>
         </main>
     </div>

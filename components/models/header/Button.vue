@@ -1,7 +1,7 @@
 <template>
     <div class="btn">
         <Icon :name="icon || ''" v-if="Boolean(icon) && !img"/>
-        <img :src="img" alt="Button Image" v-else-if="Boolean(img)">
+        <Image :src="img!" alt="Button Image" v-else-if="Boolean(img)"/>
 
         <div>
             <div>{{ label }}</div>
