@@ -51,7 +51,7 @@ export default defineNuxtPlugin(async ({ vueApp, $config: { public: { apiTransla
     
             const { result } = await res.json() as { result: Locale & { _v: string } };
 
-            if (!result || !result[localeKeys[Math.floor(Math.random() + localeKeys.length)]]) return null;
+            if (!result || !result[localeKeys[Math.floor(Math.random() * localeKeys.length)]]) return null;
     
             result._v = localeVersion;
     
