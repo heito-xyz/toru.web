@@ -1,7 +1,7 @@
 <template>
     <div class="btn">
         <Icon :name="icon || ''" v-if="Boolean(icon) && !img"/>
-        <Image :src="img!" alt="Button Image" v-else-if="Boolean(img)"/>
+        <Image class="image" :src="img!" alt="Button Image" v-else-if="Boolean(img)"/>
 
         <div>
             <div>{{ label }}</div>
@@ -41,7 +41,7 @@ const props = defineProps<{
         background-color: var(--dimming-secondary);
     }
 
-    img {
+    .image {
         margin-right: 8px;
         width: 32px;
         height: 32px;

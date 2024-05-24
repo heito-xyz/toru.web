@@ -21,7 +21,7 @@ async function fetchLanguage(code: CodeName) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                lang: languages[code],
+                lang: languages[code].name,
                 data: templateLocale
             }),
             method: 'POST',
@@ -44,11 +44,11 @@ async function fetchLanguage(code: CodeName) {
 
 
 for (const code of codes.filter(code => code !== 'en')) {
-    console.log(`Downloading a language pack: ${languages[code]}`);
+    console.log(`Downloading a language pack: ${languages[code].name}`);
     
     const result = await fetchLanguage(code);
 
-    console.log(`Installing the language pack: ${languages[code]}`);
+    console.log(`Installing the language pack: ${languages[code].name}`);
     
     fs.writeFileSync(resolve(__dirname, `../locales/${code}.locale.json`), JSON.stringify(result));
 }
