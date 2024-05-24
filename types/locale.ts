@@ -12,15 +12,41 @@ export const codes = [
 
 export type CodeName = typeof codes[number];
 
+export interface Language {
+    name: string;
+    emoji: string;
+}
 
-export const languages: Record<CodeName, string> = {
-    en: 'English',
-    ru: 'Русский',
-    ja: '日本語',
-    uk: 'Українська мова',
-    zh: '漢語',
-    fr: 'Français',
-    es: 'Español'
+
+export const languages: Record<CodeName, Language> = {
+    en: {
+        name: 'English',
+        emoji: '🇬🇧'
+    },
+    ru: {
+        name: 'Русский',
+        emoji: '🇷🇺'
+    },
+    ja: {
+        name: '日本語',
+        emoji: '🇯🇵'
+    },
+    uk: {
+        name: 'Українська мова',
+        emoji: '🇺🇦'
+    },
+    zh: {
+        name: '漢語',
+        emoji: '🇨🇳'
+    },
+    fr: {
+        name: 'Français',
+        emoji: '🇫🇷'
+    },
+    es: {
+        name: 'Español',
+        emoji: '🇪🇸'
+    }
 };
 
 

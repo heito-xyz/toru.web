@@ -111,7 +111,7 @@
                         <Button :class="{ active: shows.has('lang') }"
                             :label="$t('language')"
                             icon="language"
-                            :text="languages[$lang.code.value]"
+                            :text="languages[$lang.code.value].emoji + ' ' + languages[$lang.code.value].name"
                             :iconRight="`arrow-${shows.has('lang') ? 'up' : 'down'}`"
                             :flags="['icon-right']"
     
@@ -122,7 +122,7 @@
                             <div>
                                 <ul>
                                     <Button v-for="langCodeName of $lang.codes" :key="langCodeName"
-                                        :label="languages[langCodeName]"
+                                        :label="languages[langCodeName].emoji + ' ' + languages[langCodeName].name"
                                         icon-right="arrow-right"
 
                                         @click="$lang.set(langCodeName)"
