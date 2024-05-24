@@ -4,8 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "build:vercel": "NITRO_PRESET=vercel-edge nuxt build",
+    "prebuild": "bun run ./prebuild/index.ts",
+    "build": "bun run prebuild && nuxt build",
+    "build:vercel": "bun run prebuild && NITRO_PRESET=vercel-edge nuxt build",
     "dev": "nuxt dev --host --port=\"16947\"",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

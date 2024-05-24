@@ -1,7 +1,7 @@
 <template>
     <div :class="['account-menu', { active: shows.has('menu') }]">
         <Image class="avatar" v-if="$user.isAuth || !isLogin"
-            :src="isLogin ? $user.avatar : getDefaultImage('guast', { type: 'marble' })"
+            :src="isLogin ? $user.avatar : getDefaultImage('guest', { type: 'marble' })"
             alt="Account Avatar"
 
             @click="shows.has('menu') ? shows.delete('menu') : openAccountMenu()"
@@ -15,7 +15,7 @@
         <Transition name="content">
             <div class="content" ref="el" v-show="shows.has('menu')">
                 <div class="account">
-                    <span>{{ $user.user?.displayName || $user.user?.username || $user.user?._id || $t('guast') }}</span>
+                    <span>{{ $user.user?.displayName || $user.user?.username || $user.user?._id || $t('guest') }}</span>
 
                     <div></div>
                 </div>
@@ -111,7 +111,7 @@
                         <Button :class="{ active: shows.has('lang') }"
                             :label="$t('language')"
                             icon="language"
-                            :text="$t(`languages.` + $lang.code.value)"
+                            :text="languages[$lang.code.value]"
                             :iconRight="`arrow-${shows.has('lang') ? 'up' : 'down'}`"
                             :flags="['icon-right']"
     
@@ -122,7 +122,7 @@
                             <div>
                                 <ul>
                                     <Button v-for="langCodeName of $lang.codes" :key="langCodeName"
-                                        :label="$t(`languages.${langCodeName}`)"
+                                        :label="languages[langCodeName]"
                                         icon-right="arrow-right"
 
                                         @click="$lang.set(langCodeName)"
@@ -138,6 +138,8 @@
 </template>
 
 <script lang="ts" setup>
+
+import { languages } from '~/types/locale';
 
 // * Components
 import Button from './Button.vue';

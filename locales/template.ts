@@ -1,21 +1,11 @@
-import { locale } from '~/types/locale';
+import { type Locale } from '~/types/locale';
 
-export default locale({
-    languages: {
-        en: 'English',
-        ru: 'Russian',
-        ja: 'Japanese',
-        uk: 'Ukrainian',
-        zh: 'Chinese',
-        fr: 'French',
-        es: 'Spanish'
-    },
-
+const locale: Locale = {
     language: 'Language',
 
     welcome: 'Welcome :)',
 
-    guast: 'Guast',
+    guest: 'Guest',
     settings: 'Settings',
     exit: 'Exit',
 
@@ -44,4 +34,6 @@ export default locale({
     loginOther: 'Login another way',
     forgotPassword: 'Forgot your password?',
     loginAccount: 'Login to your account'
-});
+}
+
+export default locale;

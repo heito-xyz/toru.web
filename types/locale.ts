@@ -12,14 +12,26 @@ export const codes = [
 
 export type CodeName = typeof codes[number];
 
+
+export const languages: Record<CodeName, string> = {
+    en: 'English',
+    ru: 'Русский',
+    ja: '日本語',
+    uk: 'Українська мова',
+    zh: '漢語',
+    fr: 'Français',
+    es: 'Español'
+};
+
+
 export interface Locale {
-    languages: Record<CodeName, string>;
+    // languages: Record<CodeName, string>;
 
     language: string;
 
     welcome: string;
 
-    guast: string;
+    guest: string;
     settings: string;
     exit: string;
 
@@ -45,8 +57,4 @@ export interface Locale {
     repeatPassword: string;
     forgotPassword: string;
     loginAccount: string;
-}
-
-export function locale(params: Locale) {
-    return params;
 }
