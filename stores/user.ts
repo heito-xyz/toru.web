@@ -5,6 +5,7 @@ export interface Account {
     user: User;
     access: string;
     refresh: string;
+    updatedAt: Date;
     addedAt: Date;
 }
 
@@ -41,12 +42,12 @@ export const useUserStore = defineStore('user', () => {
 
     function setTokens(refreshToken?: string, accessToken?: string) {
         if (refreshToken) {
-            cookies.set('TORUREFRESH', refreshToken, { days: 365 });
+            $cookies.set('TORUREFRESH', refreshToken, { days: 365 });
             $api.api.setToken('refresh', refreshToken);
         }
 
         if (accessToken) {
-            cookies.set('TORUACCESS', accessToken, { days: 7 });
+            $cookies.set('TORUACCESS', accessToken, { days: 7 });
             $api.api.setToken('access', accessToken);
         }
     }
@@ -54,7 +55,7 @@ export const useUserStore = defineStore('user', () => {
     async function fetchAccounts() {
         if (process.server) return;
 
-        const cookieAccounts = cookies.searchByName('TORU%3A');
+        const cookieAccounts = $cookies.searchByName('TORU%3A');
 
         if (cookieAccounts.length < 1) return;
 
@@ -64,18 +65,42 @@ export const useUserStore = defineStore('user', () => {
 
         const list: Array<Omit<Account, 'user'> & { userId: string }> = [];
 
+        const now = Date.now();
+
         for (const key of cookieAccounts) {
-            const [addedAt, userId, refresh, access] = [key.split('%3A').pop(), ...atob(cookies.get(key)!).split(':')];
+            let [addedAt, userId, refresh, access, updatedAt] = [key.split('%3A').pop(), ...atob($cookies.get(key)!).split(':')] as any as [number, string, string, string, number?];
+
+            addedAt = Number(addedAt);
+            updatedAt = isNaN(Number(updatedAt)) ? 0 : Number(updatedAt);
+            
+            const days = (now - (updatedAt || addedAt)) / 86_400_000;
+
+            if (days > 6.5) {
+                const { ok, data } = await $api.auth.refreshToken(refresh);
+
+                if (!ok) continue;
+                
+                access = data.access_token;
+
+                $cookies.delete(`TORU%3A${addedAt}`);
+
+                $cookies.set(`TORU:${addedAt}`, btoa(`${userId}:${refresh}:${access}:${now}`), { days: 365 - days });
+            }
+            
 
             list.push({
                 userId,
                 refresh,
                 access,
-                addedAt: new Date(Number(addedAt))
+                updatedAt: new Date(updatedAt),
+                addedAt: new Date(addedAt)
             });
         }
 
         const { ok, data } = await $api.auth.getUsersByTokens(...list.map(account => account.access));
+
+        console.log(list, ok, data);
+        
 
         $wait.end('accounts:load');
 
@@ -93,10 +118,14 @@ export const useUserStore = defineStore('user', () => {
                 user
             });
 
-            if (account.access === cookies.get('TORUACCESS')) {
+            if (account.access === $cookies.get('TORUACCESS')) {
                 set(user._id);
                 setTokens(account.refresh, account.access);
             }
+        }
+
+        if (accounts.value.length > 0 && !Boolean(user.value?._id)) {
+            switchAccount(accounts.value[0]._id, true);
         }
     }
 
@@ -109,12 +138,13 @@ export const useUserStore = defineStore('user', () => {
             user,
             refresh: refreshToken,
             access: accessToken,
+            updatedAt: new Date(addedAt),
             addedAt: new Date(addedAt)
         });
 
-        const value = `${user._id}:${refreshToken}:${accessToken}`;
+        const value = `${user._id}:${refreshToken}:${accessToken}:${addedAt}`;
 
-        cookies.set(`TORU:${addedAt}`, btoa(value), { days: 365 });
+        $cookies.set(`TORU:${addedAt}`, btoa(value), { days: 365 });
 
         if (switchAccount) {
             setTokens(refreshToken, accessToken);

@@ -22,9 +22,11 @@ const props = withDefaults(defineProps<{
     text?: string;
     icon?: string;
     iconRight?: string;
+    color?: string;
     disabled?: boolean;
     flags?: Array<ButtonFlag>;
 }>(), {
+    color: 'var(--background-secondary)',
     disabled: false,
     flags: () => []
 });
@@ -42,7 +44,7 @@ const props = withDefaults(defineProps<{
     border: 1px dashed var(--T);
     align-items: center;
     justify-content: space-between;
-    background-color: var(--background-secondary);
+    background-color: v-bind('color');
     box-sizing: border-box;
     transition: .2s, transform 0s;
 
@@ -83,6 +85,14 @@ const props = withDefaults(defineProps<{
 
     i {
         color: var(--text-primary);
+
+        &:nth-child(1) {
+            margin-right: 8px;
+        }
+
+        &:last-child {
+            margin-left: 8px;
+        }
     }
 }
 

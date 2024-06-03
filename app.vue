@@ -1,6 +1,7 @@
 <template>
     <ClientOnly>
         <Wait/>
+        <Notifications/>
     </ClientOnly>
 
     <NuxtLayout class="layout">
@@ -13,6 +14,7 @@
 <script lang="ts" setup>
 
 import Header from '~/components/models/header/Index.vue';
+import Notifications from '~/components/models/notifications/Index.vue';
 import Wait from '~/components/models/wait/Index.vue';
 
 
@@ -34,7 +36,7 @@ onMounted(() => {
     
     $lang.init();
 
-    if (cookies.get('THEME') !== 'light') {
+    if ($cookies.get('THEME') !== 'light') {
         document.querySelector('html')?.classList.add('dark');
     }
 });
@@ -58,10 +60,10 @@ useHead({
             type: 'image/png',
             href: '/favicon.ico'
         },
-        // {
-        //     rel: 'stylesheet',
-        //     href: 'https://ti.heito.xyz/style.css'
-        // }
+        {
+            rel: 'stylesheet',
+            href: 'https://ti.heito.xyz/style.css'
+        }
     ],
     htmlAttrs: {
         class: 'light',

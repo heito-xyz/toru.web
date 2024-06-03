@@ -76,4 +76,4 @@ class Cookies {
     }
 }
 
-export const cookies = new Cookies();
+export const $cookies = new Cookies();

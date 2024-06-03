@@ -10,6 +10,7 @@
             :readonly="readonly"
             :disabled="disabled"
             :required="true"
+            :value="value"
             
             @input="onInput($event)"
             @focus="$emit('focus', $event)"    

@@ -24,7 +24,7 @@ export interface Member {
     joinedAt?: Date;
 }
 
-export interface Application {
+export interface Application<TypeMember = number> {
     _id: string;
 
     name?: string;
@@ -32,7 +32,7 @@ export interface Application {
 
     description?: string;
 
-    members: Array<Member>;
+    members: TypeMember;
 
     secret: string;
 

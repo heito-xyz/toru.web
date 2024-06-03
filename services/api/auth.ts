@@ -3,6 +3,7 @@ import type { ToruAPI } from '.';
 // * Types
 import type { ResponseList } from '~/types/api';
 import type { User } from '~/types/api/user';
+import type { Token } from '~/types/api/token';
 
 
 export default class {
@@ -40,6 +41,21 @@ export default class {
         return this.api.fetch('/auth/logout', {
             method: 'POST'
         });
+    }
+
+
+    refreshToken(refreshToken: string) {
+        return this.api.fetch<{ access_token: string, expires_in: number, token_type: 'Bearer' }>('/auth/refresh', {
+            body: {
+                refreshToken
+            },
+            method: 'POST'
+        });
+    }
+
+
+    getUserTokens() {
+        return this.api.fetch<ResponseList<Token>>('/auth/tokens');
     }
 
 

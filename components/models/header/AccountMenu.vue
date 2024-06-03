@@ -154,7 +154,7 @@ const $user = useUserStore();
 
 const el = ref<HTMLElement | null>(null);
 
-const lightTheme = ref(cookies.get('THEME') === 'light');
+const lightTheme = ref($cookies.get('THEME') === 'light');
 
 
 const shows = ref(new Set<'menu' | 'accounts' | 'lang'>());
@@ -187,7 +187,7 @@ function openAccountMenu() {
 function changeTheme() {
     const isLight = lightTheme.value = !lightTheme.value;
 
-    cookies.set('THEME', isLight ? 'light' : 'dark');
+    $cookies.set('THEME', isLight ? 'light' : 'dark');
 
     document.querySelector('html')!.classList[isLight ? 'add' : 'remove']('light');
     document.querySelector('html')!.classList[isLight ? 'remove' : 'add']('dark');

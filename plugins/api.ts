@@ -9,7 +9,7 @@ import Applications from '~/services/api/applications';
 export default defineNuxtPlugin(async nuxtApp => {
     const { apiUrl } = nuxtApp.$config.public;
 
-    const api = new ToruAPI(apiUrl, cookies?.get('TORUREFRESH') || '', cookies?.get('TORUACCESS') || '');
+    const api = new ToruAPI(apiUrl, $cookies?.get('TORUREFRESH') || '', $cookies?.get('TORUACCESS') || '');
 
     return {
         provide: {

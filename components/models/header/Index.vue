@@ -2,6 +2,12 @@
     <header>
         <NuxtLink class="logo" to="/">Toru <Icon name="id"/></NuxtLink>
 
+        <ul class="buttons">
+            <Icon name="bell"
+                @click="$notifications.setActive(true)"
+            />
+        </ul>
+
         <AccountMenu/>
     </header>
 </template>
@@ -9,6 +15,9 @@
 <script lang="ts" setup>
 
 import AccountMenu from './AccountMenu.vue';
+
+
+const $notifications = useNotificationsStore();
 
 </script>
 
@@ -26,7 +35,7 @@ header {
     justify-content: space-between;
     transition: .2s;
     box-sizing: border-box;
-    z-index: 100;
+    z-index: 190;
 
     a.logo {
         color: var(--color-2);
@@ -35,6 +44,20 @@ header {
 
         &:hover {
             text-decoration: underline;
+        }
+    }
+
+    ul.buttons {
+        margin: 0 12px 0 auto;
+
+        i {
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: .2s;
+
+            &:hover {
+                color: var(--color-primary);
+            }
         }
     }
 }

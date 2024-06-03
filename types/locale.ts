@@ -71,6 +71,7 @@ export interface Locale {
     rollUp: string;
 
     authorization: string;
+    authentication: string;
     register: string;
     registration: string;
     username: string;
@@ -78,9 +79,24 @@ export interface Locale {
     password: string;
     enterLogin: string;
     or: string;
+    and: string;
     createAccount: string;
     loginOther: string;
     repeatPassword: string;
     forgotPassword: string;
     loginAccount: string;
+
+    integrations: string;
+    publicProfile: string;
+    account: string;
+    appearance: string;
+    notifications: string;
+    sessions: string;
+    applications: string;
+
+    name: string;
+    displayName: string;
+    description: string;
+
+    createApp: string;
 }

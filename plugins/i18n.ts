@@ -15,7 +15,7 @@ export default defineNuxtPlugin(async ({ vueApp }) => {
         en: templateLocale
     };
 
-    let currentCode = (cookies.get('LANG') || 'en') as CodeName;
+    let currentCode = ($cookies.get('LANG') || 'en') as CodeName;
 
     const i18n = createI18n({
         legacy: false,
@@ -34,7 +34,7 @@ export default defineNuxtPlugin(async ({ vueApp }) => {
         
         currentCode = i18n.global.locale.value = code;
 
-        cookies.set('LANG', code);
+        $cookies.set('LANG', code);
     }
 
     async function init() {
