@@ -4,9 +4,7 @@ export type Type = 'json' | 'form';
 
 export interface FetchOptions {
     baseUrl?: string;
-    body?: {
-        [key: string | symbol]: any;
-    };
+    body?: Record<string | symbol, any> | string;
     method?: Method;
     type?: Type;
     headers?: {

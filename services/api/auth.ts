@@ -3,12 +3,43 @@ import type { ToruAPI } from '.';
 // * Types
 import type { ResponseList } from '~/types/api';
 import type { User } from '~/types/api/user';
-import type { Token } from '~/types/api/token';
+import type { Token, TokenScope } from '~/types/api/token';
+
+interface AuthorizeOptions {
+    response_type: 'code';
+    client_id: string;
+    redirect_uri: string;
+    scope: Array<TokenScope>;
+    state?: string;
+}
 
 
 export default class {
     constructor(private readonly api: ToruAPI) {}
 
+
+    authorize(options: AuthorizeOptions) {
+        const body = new URLSearchParams(Object.keys(options).map(key => {
+            let value = options[key as keyof typeof options];
+
+            if (key === 'scope') value = (value as Array<TokenScope>).join(' ');
+
+            return [key, value as string];
+        }));
+
+        return this.api.fetch<{
+            code: string;
+            state?: string;
+            url: string;
+        }>('/oauth/authorize', {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: body.toString(),
+            method: 'POST',
+            type: 'form'
+        });
+    }
 
     login(login: string, password: string) {
         return this.api.fetch<{

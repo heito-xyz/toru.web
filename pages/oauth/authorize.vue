@@ -34,14 +34,12 @@
                     <Image class="image" :src="getDefaultImage(app?._id!, { type: 'pixel' })"/>
                 </div>
 
-                <NuxtLink :to="$api.api.domain + $route.fullPath"
-                    style="text-decoration: none;"
-                >
-                    <Button label="Войти"
-                        icon="login"
-                        icon-right="arrow-right"
-                    />
-                </NuxtLink>
+                <Button label="Войти"
+                    icon="login"
+                    icon-right="arrow-right"
+
+                    @click="redirectTo"
+                />
             </template>
         </main>
     </div>
@@ -86,6 +84,25 @@ async function fetchApplication(appId: string) {
     if (!ok) return setError('no_app');
 
     app.value = data;
+}
+
+async function redirectTo() {
+    const { response_type, client_id, redirect_uri, scope, state = '' } = $route.query as any as Query;
+
+    const { ok, data } = await $api.auth.authorize({
+        response_type,
+        client_id,
+        redirect_uri,
+        scope: scope.split('+') as any,
+        state
+    });
+
+    console.log(ok, data);
+    
+
+    if (!ok) return;
+
+    location.href = data.url;
 }
 
 

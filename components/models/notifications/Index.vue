@@ -303,6 +303,7 @@ function enterNotification(element: Element, done: () => void) {
             border-bottom-right-radius: 15px !important;
         }
     }
+    // https://github.com/login/oauth/authorize?client_id=45d8805930e7a6d27371&redirect_uri=http://localhost:2000/github/callback&scope=repo&state=fjiew
 
     .new {
         width: 376px;
