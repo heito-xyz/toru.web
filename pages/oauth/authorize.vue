@@ -23,6 +23,13 @@
                         </div>
                     </li>
                 </ul>
+
+                <NuxtLink class="add" :to="{ path: '/login', query: { ...$route.query, add: 'true' } }">
+                    <Button :label="$t('addAccount')"
+                        icon="plus"
+                        icon-right="arrow-right"
+                    />
+                </NuxtLink>
             </template>
 
             <template v-else-if="stage === 1">
@@ -97,9 +104,6 @@ async function redirectTo() {
         state
     });
 
-    console.log(ok, data);
-    
-
     if (!ok) return;
 
     location.href = data.url;
@@ -153,6 +157,8 @@ definePageMeta({
     }
 
     ul.accounts {
+        margin-bottom: 12px;
+
         li {
             cursor: pointer;
             display: flex;
@@ -203,6 +209,10 @@ definePageMeta({
                 }
             }
         }
+    }
+
+    .add {
+        text-decoration: none;
     }
 
     .user-to-app {

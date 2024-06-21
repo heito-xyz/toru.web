@@ -42,7 +42,7 @@
                 @click="auth"
             />
 
-            <NuxtLink :to="isLoginPage ? '/register' : '/login'">
+            <NuxtLink :to="{ path: isLoginPage ? '/register' : '/login', query: $route.query }">
                 {{ $t(isLoginPage ? 'createAccount' : 'loginAccount') }}
             </NuxtLink>
 
@@ -123,6 +123,10 @@ async function auth() {
         const { user, refreshToken, accessToken } = data as { user: User, accessToken: string, refreshToken: string };
     
         $user.addAccount(user, refreshToken, accessToken, true);
+    }
+
+    if ($route.query?.add === 'true') {
+        $router.push({ path: `/oauth/authorize`, query: $route.query });
     }
 
     $router.push('/' + (isLoginPage.value ? '' : 'login'));
